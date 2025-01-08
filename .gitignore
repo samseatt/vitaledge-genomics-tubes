@@ -1,0 +1,29 @@
+# Python-related
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Conda Environment
+env/
+*.env
+
+# Data files
+data/
+results/
+
+# VSCode settings
+.vscode/
+
+# Logs
+*.log
+*.out
+*.err
+logs/
+
+# Environment-specific Configurations
+.env.*
+*.local
+
+# Misc.
+docs-wip/
+

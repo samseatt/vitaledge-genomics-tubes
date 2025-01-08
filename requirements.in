@@ -1,0 +1,35 @@
+# requirements.in
+
+# FastAPI and related dependencies
+fastapi
+uvicorn
+
+# HTTP client for calling microservices
+httpx
+
+python-dotenv  # For environment variable management
+
+# Configuration and settings management
+pydantic
+pydantic-settings
+
+# For testing
+pytest
+pytest-asyncio
+
+# Database libraries (example for PostgreSQL)
+sqlalchemy
+databases
+asyncpg
+psycopg2
+pymongo
+
+# For performance optimization
+onnxruntime
+
+# Numpy for vector processing (Pinned)
+numpy<2,>=1.22.4
+
+# To ensure that the fsspec version meets the requirements of datasets
+# fsspec[http]<=2024.9.0
+
