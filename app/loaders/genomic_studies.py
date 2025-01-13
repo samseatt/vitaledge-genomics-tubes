@@ -50,8 +50,8 @@ def load_subject_studies_to_datalake(studies_data):
 
         variant_insert_query = """
         INSERT INTO subject_study_variants (
-            study_id, genotype, effect_size, variant_frequency
-        ) VALUES (%s, %s, %s, %s);
+            study_id, variant, genotype, effect_size, variant_frequency, significance
+        ) VALUES (%s, %s, %s, %s, %s, %s);
         """
 
         study_ids = []
@@ -97,6 +97,7 @@ def load_subject_studies_to_datalake(studies_data):
             logger.info(cursor.mogrify(subject_study_insert_query, subject_study_values))
             cursor.execute(subject_study_insert_query, subject_study_values)
             subject_study_id = cursor.fetchone()[0]
+            logger.info(f"Successfully inserted subject-study with subject_study_id: {subject_study_id}")
 
             # Insert phenotype tags (if any)
             for tag in study_data.get("tags", []):
@@ -105,19 +106,24 @@ def load_subject_studies_to_datalake(studies_data):
                     "INSERT INTO subject_study_phenotypes (subject_study_id, phenotype_tag_id) VALUES (%s, %s);",
                     (subject_study_id, tag_id)
                 )
+            logger.info(f"Successfully inserted tags.")
 
             # Insert variants
             variant_values = [
                 (
                     subject_study_id,
+                    variant.get("variant"),
                     variant.get("genotype"),
                     variant.get("effect-size"),
-                    variant.get("variant-frequency")
+                    variant.get("variant-frequency"),
+                    float(variant.get("significance").replace(" x 10", "e"))
                 )
                 for variant in variants_data
             ]
+            logger.info(f"Successfully parsed {len(variants_data)} variants")
             if variant_values:
                 execute_batch(cursor, variant_insert_query, variant_values)
+                logger.info(f"Successfully inserted {len(variant_values)} variants")
 
         # Commit the transaction
         conn.commit()
