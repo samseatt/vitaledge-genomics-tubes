@@ -50,8 +50,8 @@ def load_subject_studies_to_datalake(studies_data):
 
         variant_insert_query = """
         INSERT INTO subject_study_variants (
-            study_id, variant, genotype, effect_size, variant_frequency, significance
-        ) VALUES (%s, %s, %s, %s, %s, %s);
+            study_id, variant, genotype, gene, effect_size, effect_polarity, variant_frequency, significance
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
         """
 
         study_ids = []
@@ -114,7 +114,9 @@ def load_subject_studies_to_datalake(studies_data):
                     subject_study_id,
                     variant.get("variant"),
                     variant.get("genotype"),
+                    variant.get("gene"),
                     variant.get("effect-size"),
+                    variant.get("effect-polarity"),
                     variant.get("variant-frequency"),
                     float(variant.get("significance").replace(" x 10", "e"))
                 )
